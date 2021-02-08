@@ -16,7 +16,7 @@ function printComponent(id) {
         <img src="img/courses/${course.img}"> 
         </figure>
         <div class="info__card">
-            <h4>UX/UI</h4>
+            <h4>${course.title}</h4>
             <figure class="mark m_${course.mark}">
                 <img src="img/rates.png">
             </figure>
