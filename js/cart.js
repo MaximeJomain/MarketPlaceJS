@@ -11,13 +11,11 @@ for (let i = 0; i < cartStockage.length; i++) {
     addToCart(cartStockage[i])
 }
 
-//console.log(x)
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
         let cardId = btn.getAttribute('data-id')
         addToCart(cardId)
-      //  cartStockage[`${cardId}`] = `${COURSES[cardId]}`
         cartStockage.push(cardId)
         localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     })
