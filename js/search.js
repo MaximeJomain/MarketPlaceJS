@@ -26,7 +26,6 @@ input.addEventListener('input', () => {
             hiddenCourse++
         }
     }
-
     if (hiddenCourse == courses.length) {
         errorMsg.classList.remove('hidden')
     }

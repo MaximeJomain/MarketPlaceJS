@@ -1,8 +1,8 @@
 var component = document.querySelector('.courses__container')
-var courses = Object.keys(COURSES) // Récupération de toutes les clés de mon objet COURSES
+var coursesList = Object.keys(COURSES) // Récupération de toutes les clés de mon objet COURSES
 
 // Pour chaque clés de COURSES, on print le cours 
-for (let i = courses.length; i >= 1; i--) {
+for (let i = coursesList.length; i >= 1; i--) {
     printComponent(i)
 }
 
