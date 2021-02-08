@@ -1,6 +1,7 @@
 
 var addToCartBtn = document.querySelectorAll('.add-to-cart')
 var cart = document.querySelector('#cart tbody')
+var notif = document.querySelector('body')
 
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
@@ -22,4 +23,14 @@ function addToCart(id) {
             <td><img src="img/cross.png" class="remove-course" data-id="${id}" style="width:25px;height:auto;cursor:pointer"></td>
         </tr>
     `)
+    // Apparition d'une notif quand tu ajoute un cours au panier
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert">
+        <span class="alertaddcart"></span>
+        ${course.title} à été ajouté au panier !
+    </div>
+    `)
+    //setTimeout( ,3000)
+
+    
 }
