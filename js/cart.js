@@ -1,15 +1,29 @@
-
 var addToCartBtn = document.querySelectorAll('.add-to-cart')
 var cart = document.querySelector('#cart tbody')
 var notif = document.querySelector('body')
 
+if (localStorage.getItem('cartStockage') == null) {
+    localStorage.setItem('cartStockage', '[]')
+}
+
+var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
+for (let i = 0; i < cartStockage.length; i++) {
+    addToCart(cartStockage[i])
+}
+
+//console.log(x)
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
         let cardId = btn.getAttribute('data-id')
         addToCart(cardId)
+      //  cartStockage[`${cardId}`] = `${COURSES[cardId]}`
+        cartStockage.push(cardId)
+        localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     })
 }
+
+localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
 function addToCart(id) {
     let course = COURSES[id]
