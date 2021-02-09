@@ -22,8 +22,9 @@ function printComponent(id) {
             </figure>
             <p>
                 <span class="price">${course.initial_price} €</span>
-                <span class="discount">${course.price}€</span>
+                <span class="discount">${course.initial_price}€</span>
             </p>
+            <p class="promotion">Article en promotion ! <span></span></p>
             <p>
                 Disponible: <span class="stock">${course.stock}</span>
             </p>

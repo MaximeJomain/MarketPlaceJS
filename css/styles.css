@@ -154,7 +154,7 @@ header .submenu:hover #cart::-webkit-scrollbar-thumb:hover {background: #555;}
 .course__item {
   border: 1px solid rgba(0,0,0,0.25);
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 0 0 10px 0;
@@ -193,6 +193,7 @@ header .submenu:hover #cart::-webkit-scrollbar-thumb:hover {background: #555;}
   font-weight: 700;
 }
 .course__item .price {
+  opacity: 0;
   text-decoration: line-through;
   color: red;
 }
@@ -330,4 +331,13 @@ footer {
     transform: translateX(150%);
     visibility: visible;
   }
+}
+
+.promotion {
+  display: none;
+  margin-bottom: 10px;
+  position: absolute;
+  bottom: 49px;
+  font-weight: bold;
+  color: red;
 }
