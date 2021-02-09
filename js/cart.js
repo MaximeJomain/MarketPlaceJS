@@ -32,7 +32,7 @@ localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
 function addToCart(id) {
     let course = COURSES[id]
-    console.log(`Add ${course.title} to cart`);
+
     cart.insertAdjacentHTML('afterbegin', `
         <tr>
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
@@ -49,7 +49,4 @@ function addToCart(id) {
         ${course.title} à été ajouté au panier !
     </div>
     `)
-    //setTimeout( ,3000)
-
-    
 }
