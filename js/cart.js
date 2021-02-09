@@ -15,6 +15,9 @@ if (localStorage.getItem('cartStockage') == null) {
 
 // Add courses to cart from localstorage
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
+
+if (cartStockage.length === 0) {displayNotifEmptyCart()}
+
 // for (let i = 0; i < cartStockage.length; i++) {
 //     addToCart(cartStockage[i])
 // }
@@ -108,6 +111,7 @@ function removeToCart(id) {
             cart.removeChild(cartcourselist[i])
             delete cartStockage[id]
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
+            displayNotifRemove(id)
         }
     }
 }
@@ -120,9 +124,11 @@ function clearCart() {
         const course = cartCoursesList[i];
         cart.removeChild(course)
     }
+
+    displayNotifRemoveAll()
+
     // Update the localstorage
     localStorage.setItem('cartStockage', '{}')
-    
 }
 
 // Display notification when adding to the cart
@@ -182,6 +188,17 @@ function displayNotifRemoveAll(){
     <div class="alert" style="background-color: #d03625;">
         <span class="alertaddcart"></span>
         Vous venez de vider votre panier !
+    </div>
+`)
+    $('.alert').addClass("hide")
+}
+
+function displayNotifEmptyCart(){
+    // Display a message when cart is empty
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert" style="background-color: #52be80;">
+        <span class="alertaddcart"></span>
+        Votre panier est vide !
     </div>
 `)
     $('.alert').addClass("hide")
