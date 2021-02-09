@@ -84,11 +84,15 @@ function addToCart(id, qte) {
         promotion = true
     }
 }
+
+// Change course stock after adding it to the cart
 function updateCourseStock(id) {
     let newStock = COURSES[id].stock -= 1
     let stockSpan = coursesCard[id - 1].querySelector('.stock')
     stockSpan.innerHTML = newStock
 } 
+
+// Remove course from cart and localstorage 
 function removeToCart(id) {
     cartcourselist = document.querySelectorAll('.cart-course')
     for (let i = 0; i < cartcourselist.length; i++) {
@@ -97,11 +101,13 @@ function removeToCart(id) {
 
         if (courseId == id) {
             cart.removeChild(cartcourselist[i])
-            localStorage.removeItem(id)
+            delete cartStockage[id]
+            localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
         }
     }
 }
 
+// Clear the cart
 function clearCart() {
     var cartCoursesList = document.querySelectorAll('.cart-course')
 
@@ -110,10 +116,11 @@ function clearCart() {
         cart.removeChild(course)
     }
     // Update the localstorage
-    localStorage.setItem('cartStockage', '[]')
+    localStorage.setItem('cartStockage', '{}')
     
 }
 
+// Display notification when adding to the cart
 function displayNotifAdd(cardId){
     // Apparition d'une notif quand tu ajoute un cours au panier
     notif.insertAdjacentHTML('afterbegin', `
