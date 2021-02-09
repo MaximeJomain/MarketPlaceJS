@@ -278,6 +278,8 @@ footer {
   display: block;
   margin-top: 50px;
 }
+
+
 .notifs {
   position: absolute;
   display: flex;
@@ -330,3 +332,4 @@ footer {
     visibility: visible;
   }
 }
+
