@@ -2,15 +2,18 @@ var addToCartBtn = document.querySelectorAll('.add-to-cart')
 var cart = document.querySelector('#cart tbody')
 var notif = document.querySelector('body')
 
+// If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
     localStorage.setItem('cartStockage', '[]')
 }
 
+// Add courses to cart from localstorage
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
 for (let i = 0; i < cartStockage.length; i++) {
     addToCart(cartStockage[i])
 }
 
+// Add courses to cart from html
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
@@ -21,11 +24,12 @@ for (let i = 0; i < addToCartBtn.length; i++) {
     })
 }
 
+// Save cart data in localstorage
 localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
 function addToCart(id) {
     let course = COURSES[id]
-    console.log(`Add ${course.title} to cart`);
+
     cart.insertAdjacentHTML('afterbegin', `
         <tr>
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
@@ -42,7 +46,4 @@ function addToCart(id) {
         ${course.title} à été ajouté au panier !
     </div>
     `)
-    //setTimeout( ,3000)
-
-    
 }

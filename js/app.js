@@ -32,4 +32,3 @@ function printComponent(id) {
     </div>
     `)
 }
-
