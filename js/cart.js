@@ -3,20 +3,22 @@ var addToCartBtn = document.querySelectorAll('.add-to-cart')
 var cart = document.querySelector('#cart tbody')
 var notif = document.querySelector('body')
 
-// If variable doesn't exists, create it
+// Si le localStorage est vide quand on arrive sur la page, on y crée un tableau vide
 if (localStorage.getItem('cartStockage') == null) {
     localStorage.setItem('cartStockage', '[]')
 }
 
-// Add courses to cart from localstorage
+// A chaque initialisation de la page, on récupère le contenu du tableau dans une variable objet cartStockage
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
+
+// On réajoute dans le panier tous les objets deja présents dans cartStockage
 for (let i = 0; i < cartStockage.length; i++) {
     addToCart(cartStockage[i])
     updateCourseStock(cartStockage[i])
 
 }
 
-// Add courses to cart from html
+// Ici, on attends un évenement clic sur les boutons d'ajout au panier, on récupère l'ID du bouton puis on ajoute l'objet dans le panier et dans cartStockage
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
@@ -43,8 +45,9 @@ for (let i = 0; i < addToCartBtn.length; i++) {
     })
 }
 
-// Save cart data in localstorage
+// On met a jour le tableau présent dans le localStorage après ajout ou suppression d'objets dans le panier
 localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
+
 
 function addToCart(id) {
     let course = COURSES[id]
