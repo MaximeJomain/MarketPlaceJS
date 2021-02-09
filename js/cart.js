@@ -1,8 +1,8 @@
-var coursesCard = document.querySelectorAll('.course__item')
-var addToCartBtn = document.querySelectorAll('.add-to-cart')
-var cart = document.querySelector('#cart tbody')
-var notif = document.querySelector('body')
-let clearCartBtn = document.querySelector('#empty-cart')
+var coursesCard     = document.querySelectorAll('.course__item')
+var addToCartBtn    = document.querySelectorAll('.add-to-cart')
+var cart            = document.querySelector('#cart tbody')
+var notif           = document.querySelector('body')
+var clearCartBtn    = document.querySelector('#empty-cart')
 
 // Si le localStorage est vide quand on arrive sur la page, on y crée un tableau vide
 if (localStorage.getItem('cartStockage') == null) {
@@ -55,7 +55,7 @@ function addToCart(id) {
     let course = COURSES[id]
 
     cart.insertAdjacentHTML('afterbegin', `
-        <tr>
+        <tr class="cart-course">
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
             <td>${course.title}</td>
             <td>${course.price}€</td>
@@ -70,7 +70,13 @@ function updateCourseStock(id) {
     stockSpan.innerHTML = newStock
 } 
 
-
 function clearCart() {
+    var cartCoursesList = document.querySelectorAll('.cart-course')
 
+    for (let i = 0; i < cartCoursesList.length; i++) {
+        const course = cartCoursesList[i];
+        cart.removeChild(course)
+    }
+    // Update the localstorage
+    localStorage.setItem('cartStockage', '[]')
 }
