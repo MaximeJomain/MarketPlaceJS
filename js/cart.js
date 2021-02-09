@@ -68,9 +68,9 @@ function addToCart(id, qte) {
     cart.insertAdjacentHTML('afterbegin', `
         <tr class="cart-course">
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
-            <td>${course.title}</td>
+            <td class="cart-course-title">${course.title}</td>
             <td>${course.price}€</td>
-            <td id="quantity[${id}]">${qte}</td>
+            <td class="cart-course-qte" id="quantity[${id}]">${qte}</td>
             <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
         </tr>
     `)
