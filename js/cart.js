@@ -47,6 +47,12 @@ for (let i = 0; i < addToCartBtn.length; i++) {
                 qte++
                 cartStockage[cardId] = qte
                 document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
+
+                // Check if promotion is activable
+                if (getCartAmount() >= 100 && promotion == false) {
+                    startPromotion()
+                    promotion = true
+                }
             }
     
             // Save cart data in localstorage
@@ -72,7 +78,7 @@ function addToCart(id, qte) {
         <tr class="cart-course">
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
             <td class="cart-course-title">${course.title}</td>
-            <td>${course.price}€</td>
+            <td>${course.initial_price}€</td>
             <td class="cart-course-qte" id="quantity[${id}]">${qte}</td>
             <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
         </tr>
@@ -81,7 +87,6 @@ function addToCart(id, qte) {
 
 
     // Check if promotion is activable
-    console.log(getCartAmount());
     if (getCartAmount() >= 100 && promotion == false) {
         startPromotion()
         promotion = true
@@ -147,7 +152,6 @@ function getCartAmount() {
         const courseQte = parseInt(cartCourses[i].querySelector('.cart-course-qte').innerHTML)
         const courseTitle = cartCourses[i].querySelector('.cart-course-title').innerHTML
         const coursePrice = getCoursePrice(courseTitle)
-
         // Calcul the total amount
         const courseAmount = courseQte * coursePrice
         total += courseAmount
@@ -164,7 +168,7 @@ function getCoursePrice(courseTitle) {
             i++
         }
     }
-    return COURSES[i].price
+    return COURSES[i].initial_price
 }
 
 function displayNotifRemove(cardId){
