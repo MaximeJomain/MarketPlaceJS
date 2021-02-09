@@ -9,15 +9,19 @@ let deletebtnlist = document.querySelectorAll('.remove-course')
 
 // If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
-    localStorage.setItem('cartStockage', '[]')
+    localStorage.setItem('cartStockage', '{}')
 }
 
 // Add courses to cart from localstorage
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
-for (let i = 0; i < cartStockage.length; i++) {
-    addToCart(cartStockage[i])
-    updateCourseStock(cartStockage[i])
-}
+// for (let i = 0; i < cartStockage.length; i++) {
+//     addToCart(cartStockage[i])
+// }
+
+Object.entries(cartStockage).forEach(([key, value]) => {
+    addToCart(key, value)
+    // updateCourseStock(cartStockage[i])
+ });
 
 // Add courses to cart from html
 for (let i = 0; i < addToCartBtn.length; i++) {
@@ -25,10 +29,23 @@ for (let i = 0; i < addToCartBtn.length; i++) {
     btn.addEventListener('click', () => {
         let cardId = btn.getAttribute('data-id')
         if (COURSES[cardId].stock > 0) {
-            addToCart(cardId)
+   
+            // Display the item in cart
+            if (cartStockage[cardId] == null) {
+                qte = 1
+                addToCart(cardId, qte)
+                cartStockage[cardId] = qte
+            }
+
+            // Increase item quantity in cart
+            else {
+                qte = cartStockage[cardId]
+                qte++
+                cartStockage[cardId] = qte
+                document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
+            }
     
             // Save cart data in localstorage
-            cartStockage.push(cardId)
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     
             // Display notification
@@ -44,7 +61,7 @@ for (let i = 0; i < addToCartBtn.length; i++) {
 // Save cart data in localstorage
 localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
-function addToCart(id) {
+function addToCart(id, qte) {
     let course = COURSES[id]
 
     cart.insertAdjacentHTML('afterbegin', `
@@ -52,7 +69,7 @@ function addToCart(id) {
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
             <td>${course.title}</td>
             <td>${course.price}€</td>
-            <td>1</td>
+            <td id="quantity[${id}]">${qte}</td>
             <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
         </tr>
     `)
