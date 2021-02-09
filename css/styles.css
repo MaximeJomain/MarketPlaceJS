@@ -287,7 +287,6 @@ footer {
 }
 .alert {
   visibility: hidden;
-  background-color: #00B2BD;
   border: none;
   color: white;
   padding: 15px 32px;

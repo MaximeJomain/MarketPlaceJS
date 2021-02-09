@@ -32,7 +32,8 @@ for (let i = 0; i < addToCartBtn.length; i++) {
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     
             // Display notification
-            displayNotif(cardId)
+            displayNotifAdd(cardId)
+
             // Update the stock of the course
             updateCourseStock(cardId)
         }
@@ -77,12 +78,34 @@ function clearCart() {
     
 }
 
-function displayNotif(cardId){
+function displayNotifAdd(cardId){
     // Apparition d'une notif quand tu ajoute un cours au panier
     notif.insertAdjacentHTML('afterbegin', `
-    <div class="alert">
+    <div class="alert" style="background-color: #00B2BD;">
         <span class="alertaddcart"></span>
         ${COURSES[cardId].title} à été ajouté au panier !
+    </div>
+`)
+    $('.alert').addClass("hide")
+}
+
+function displayNotifRemove(cardId){
+    // Apparition d'une notif quand tu retire un cours du panier
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert" style="background-color: #E25241;">
+        <span class="alertaddcart"></span>
+        ${COURSES[cardId].title} à été retiré du panier !
+    </div>
+`)
+    $('.alert').addClass("hide")
+}
+
+function displayNotifRemoveAll(){
+    // Apparition d'une notif quand tu vide le panier
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert" style="background-color: #d03625;">
+        <span class="alertaddcart"></span>
+        Vous venez de vider votre panier !
     </div>
 `)
     $('.alert').addClass("hide")
