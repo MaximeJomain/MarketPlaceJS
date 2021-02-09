@@ -1,0 +1,93 @@
+
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: absolute;
+    top: 150px;
+    left: 30%;
+    width: 40%;
+    height: 65%;
+    border-radius: 10px;
+    background-color: white;
+  }
+  
+  .infoContainer{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
+  
+  .btnform{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    width: 72%;
+    justify-content: space-around;
+    margin-top: 12%;
+    margin-bottom: 3px;
+  }
+  
+  .namesContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+  }
+  
+  .namesContainer input{
+    width: 48%;
+  }
+  
+  .form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 4%;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  
+  #validerCommande{
+    margin-right: 2px;
+    border: none;
+  }
+  
+  #empty-cart{
+    margin-left: 2px;
+    border: none;
+  }
+  
+  #title h3 {
+    text-align: left;
+    width: fit-content;
+    margin: 0 auto 25px auto;
+    font-size: 30px;
+    font-weight: 100;
+    padding: 8px 15px;
+    position: relative;
+    color: #383838;
+    content: "";
+    display: block;
+  }
+  #title h3:after {
+    content: "";
+    display: block;
+    height: 15px;
+    width: 100%;
+    background: #1dbdc5;
+    bottom: 3px;
+    left: 10px;
+    z-index: -1;
+  }
+
+  .cardInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .cardInfo input{
+    width: 48%;
+  }
+  
