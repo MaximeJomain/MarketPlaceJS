@@ -3,32 +3,59 @@ var addToCartBtn    = document.querySelectorAll('.add-to-cart')
 var cart            = document.querySelector('#cart tbody')
 var clearCartBtn    = document.querySelector('#empty-cart')
 var notif           = document.querySelector('.notifs')
+let promotion       = false
+let deletebtnlist = document.querySelectorAll('.remove-course')
 
-// Si le localStorage est vide quand on arrive sur la page, on y crée un tableau vide
+
+
+// If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
-    localStorage.setItem('cartStockage', '[]')
+    localStorage.setItem('cartStockage', '{}')
 }
 
-// A chaque initialisation de la page, on récupère le contenu du tableau dans une variable objet cartStockage
+// Add courses to cart from localstorage
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
 
-// On réajoute dans le panier tous les objets deja présents dans cartStockage
-for (let i = 0; i < cartStockage.length; i++) {
-    addToCart(cartStockage[i])
-    updateCourseStock(cartStockage[i])
-}
+if (cartStockage.length === 0) {displayNotifEmptyCart()}
 
-// Ici, on attends un évenement clic sur les boutons d'ajout au panier, on récupère l'ID du bouton puis on ajoute l'objet dans le panier et dans cartStockage
+// for (let i = 0; i < cartStockage.length; i++) {
+//     addToCart(cartStockage[i])
+// }
+
+Object.entries(cartStockage).forEach(([key, value]) => {
+    addToCart(key, value)
+    // updateCourseStock(cartStockage[i])
+ });
+
+// Add courses to cart from html
 for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
         let cardId = btn.getAttribute('data-id')
-
         if (COURSES[cardId].stock > 0) {
-            addToCart(cardId)
+   
+            // Display the item in cart
+            if (cartStockage[cardId] == null) {
+                qte = 1
+                addToCart(cardId, qte)
+                cartStockage[cardId] = qte
+            }
+
+            // Increase item quantity in cart
+            else {
+                qte = cartStockage[cardId]
+                qte++
+                cartStockage[cardId] = qte
+                document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
+
+                // Check if promotion is activable
+                if (getCartAmount() >= 100 && promotion == false) {
+                    startPromotion()
+                    promotion = true
+                }
+            }
     
             // Save cart data in localstorage
-            cartStockage.push(cardId)
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     
             // Display notification
@@ -41,31 +68,55 @@ for (let i = 0; i < addToCartBtn.length; i++) {
     })
 }
 
-// On met a jour le tableau présent dans le localStorage après ajout ou suppression d'objets dans le panier
+// Save cart data in localstorage
 localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
-// Put an eventListener on the clear cart btn
-clearCartBtn.addEventListener('click', clearCart)
-
-function addToCart(id) {
+function addToCart(id, qte) {
     let course = COURSES[id]
 
     cart.insertAdjacentHTML('afterbegin', `
         <tr class="cart-course">
             <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
-            <td>${course.title}</td>
-            <td>${course.price}€</td>
-            <td>1</td>
-            <td><img src="img/cross.png" class="remove-course" data-id="${id}" style="width:25px;height:auto;cursor:pointer"></td>
+            <td class="cart-course-title">${course.title}</td>
+            <td>${course.initial_price}€</td>
+            <td class="cart-course-qte" id="quantity[${id}]">${qte}</td>
+            <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
         </tr>
     `)
+    deletebtnlist = document.querySelectorAll('.remove-course')
+
+
+    // Check if promotion is activable
+    if (getCartAmount() >= 100 && promotion == false) {
+        startPromotion()
+        promotion = true
+    }
 }
+
+// Change course stock after adding it to the cart
 function updateCourseStock(id) {
     let newStock = COURSES[id].stock -= 1
     let stockSpan = coursesCard[id - 1].querySelector('.stock')
     stockSpan.innerHTML = newStock
 } 
 
+// Remove course from cart and localstorage 
+function removeToCart(id) {
+    cartcourselist = document.querySelectorAll('.cart-course')
+    for (let i = 0; i < cartcourselist.length; i++) {
+        const course = cartcourselist[i];
+        let courseId = course.querySelector('.remove-course').getAttribute('data-id')
+
+        if (courseId == id) {
+            cart.removeChild(cartcourselist[i])
+            delete cartStockage[id]
+            localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
+            displayNotifRemove(id)
+        }
+    }
+}
+
+// Clear the cart
 function clearCart() {
     var cartCoursesList = document.querySelectorAll('.cart-course')
 
@@ -73,11 +124,14 @@ function clearCart() {
         const course = cartCoursesList[i];
         cart.removeChild(course)
     }
+
+    displayNotifRemoveAll()
+
     // Update the localstorage
-    localStorage.setItem('cartStockage', '[]')
-    
+    localStorage.setItem('cartStockage', '{}')
 }
 
+// Display notification when adding to the cart
 function displayNotifAdd(cardId){
     // Apparition d'une notif quand tu ajoute un cours au panier
     notif.insertAdjacentHTML('afterbegin', `
@@ -87,6 +141,34 @@ function displayNotifAdd(cardId){
     </div>
 `)
     $('.alert').addClass("hide")
+
+}
+function getCartAmount() {
+    let cartCourses = document.querySelectorAll('.cart-course')
+    let total = 0
+
+    for (let i = 0; i < cartCourses.length; i++) {
+        // Get the price of the course
+        const courseQte = parseInt(cartCourses[i].querySelector('.cart-course-qte').innerHTML)
+        const courseTitle = cartCourses[i].querySelector('.cart-course-title').innerHTML
+        const coursePrice = getCoursePrice(courseTitle)
+        // Calcul the total amount
+        const courseAmount = courseQte * coursePrice
+        total += courseAmount
+    }
+    return total
+}
+
+function getCoursePrice(courseTitle) {
+    let i = 1
+    while(true) {
+        if (COURSES[i].title == courseTitle) {
+            break
+        } else {
+            i++
+        }
+    }
+    return COURSES[i].initial_price
 }
 
 function displayNotifRemove(cardId){
@@ -106,6 +188,17 @@ function displayNotifRemoveAll(){
     <div class="alert" style="background-color: #d03625;">
         <span class="alertaddcart"></span>
         Vous venez de vider votre panier !
+    </div>
+`)
+    $('.alert').addClass("hide")
+}
+
+function displayNotifEmptyCart(){
+    // Display a message when cart is empty
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert" style="background-color: #52be80;">
+        <span class="alertaddcart"></span>
+        Votre panier est vide !
     </div>
 `)
     $('.alert').addClass("hide")
