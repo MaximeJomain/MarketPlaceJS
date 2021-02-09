@@ -1,8 +1,8 @@
 var coursesCard     = document.querySelectorAll('.course__item')
 var addToCartBtn    = document.querySelectorAll('.add-to-cart')
 var cart            = document.querySelector('#cart tbody')
-var notif           = document.querySelector('body')
 var clearCartBtn    = document.querySelector('#empty-cart')
+var notif           = document.querySelector('.notifs')
 
 // Si le localStorage est vide quand on arrive sur la page, on y crée un tableau vide
 if (localStorage.getItem('cartStockage') == null) {
@@ -32,16 +32,11 @@ for (let i = 0; i < addToCartBtn.length; i++) {
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     
             // Display notification
-            notif.insertAdjacentHTML('afterbegin', `
-                <div class="alert">
-                    <span class="alertaddcart"></span>
-                    ${COURSES[cardId].title} à été ajouté au panier !
-                </div>
-            `)
-    
+            displayNotif(cardId)
             // Update the stock of the course
             updateCourseStock(cardId)
         }
+        
     })
 }
 
@@ -79,4 +74,16 @@ function clearCart() {
     }
     // Update the localstorage
     localStorage.setItem('cartStockage', '[]')
+    
+}
+
+function displayNotif(cardId){
+    // Apparition d'une notif quand tu ajoute un cours au panier
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert">
+        <span class="alertaddcart"></span>
+        ${COURSES[cardId].title} à été ajouté au panier !
+    </div>
+`)
+    $('.alert').addClass("hide")
 }
