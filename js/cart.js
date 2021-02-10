@@ -16,9 +16,6 @@ if (localStorage.getItem('cartStockage') == null) {
 // Add courses to cart from localstorage, at load of the page
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
 
-if (cartStockage.length === 0) {displayNotifEmptyCart()}
-
-
 Object.entries(cartStockage).forEach(([key, value]) => {
         addToCart(key, value)
 });
@@ -208,4 +205,13 @@ function displayNotifEmptyCart(){
     </div>
 `)
     $('.alert').addClass("hide")
+}
+
+function cartIsEmpty(){
+    cartcourselist = document.querySelectorAll('.cart-course')
+    if (cartcourselist.length == 0){
+        displayNotifEmptyCart()
+    } else {
+        window.location.href = 'form.html'
+    }
 }
