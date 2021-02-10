@@ -108,7 +108,7 @@ function removeToCart(id) {
     for (let i = 0; i < cartcourselist.length; i++) {
         const course = cartcourselist[i];
         let courseId = course.querySelector('.remove-course').getAttribute('data-id')
-        confirmRemoveToCart()
+        
 
         if (courseId == id) {
             cart.removeChild(cartcourselist[i])
@@ -117,6 +117,7 @@ function removeToCart(id) {
             displayNotifRemove(id)
         }
     }
+    confirmRemoveToCart()
 }
 
 // Clear the cart
