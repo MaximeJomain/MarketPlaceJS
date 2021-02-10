@@ -120,13 +120,10 @@ function removeToCart(id) {
             delete cartStockage[id]
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
             displayNotifRemove(id)
-
         }
     }
-    
 }
 
-// Clear the cart
 function clearCart() {
     var cartCoursesList = document.querySelectorAll('.cart-course')
 
@@ -172,7 +169,6 @@ function displayNotifAdd(cardId){
     </div>
 `)
     $('.alert').addClass("hide")
-
 }
 function getCartAmount() {
     let cartCourses = document.querySelectorAll('.cart-course')

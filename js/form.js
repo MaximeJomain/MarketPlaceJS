@@ -47,7 +47,7 @@ function checkblueCard(){
     let capCounter = 0
     let lowCounter = 0
     let nbCounter = 0
-    console.log(bluecard.length)
+
     for (let i = 0; i < bluecard.length; i++) {
         let letter = bluecard[i];
         if (isNumber(letter)) {
