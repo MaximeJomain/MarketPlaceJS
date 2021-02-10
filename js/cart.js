@@ -111,13 +111,14 @@ function removeToCart(id) {
         
 
         if (courseId == id) {
+            confirmRemoveToCart()
             cart.removeChild(cartcourselist[i])
             delete cartStockage[id]
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
             displayNotifRemove(id)
         }
     }
-    confirmRemoveToCart()
+    
 }
 
 // Clear the cart
