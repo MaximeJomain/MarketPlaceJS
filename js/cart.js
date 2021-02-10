@@ -6,12 +6,6 @@ var notif           = document.querySelector('.notifs')
 let deletebtnlist   = document.querySelectorAll('.remove-course')
 let promotion       = false
 
-// If cart is empty, notify it
-cartcourselist = document.querySelectorAll('.cart-course')
-    if (cartcourselist.length == 0){
-        displayNotifEmptyCart()
-    }
-
 
 // If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
@@ -112,16 +106,16 @@ function increaseCourseStock(id, qte) {
 }
 function removeToCart(id) {
     cartcourselist = document.querySelectorAll('.cart-course')
-    for (let i = 0; i < cartcourselist.length; i++) {
-        const course = cartcourselist[i];
-        let courseId = course.querySelector('.remove-course').getAttribute('data-id')
-        
+    if (confirmRemoveToCart() == true){
+        for (let i = 0; i < cartcourselist.length; i++) {
+                const course = cartcourselist[i];
+                let courseId = course.querySelector('.remove-course').getAttribute('data-id')
+                
 
-        if (courseId == id) {
-            confirmRemoveToCart()
-            // Update the stock of the course
-            let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
-            increaseCourseStock(id, courseQte)
+                if (courseId == id) {
+                    // Update the stock of the course
+                    let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
+                    increaseCourseStock(id, courseQte)
 
             cart.removeChild(cartcourselist[i])
             delete cartStockage[id]
@@ -133,7 +127,11 @@ function removeToCart(id) {
 
 function clearCart() {
     var cartCoursesList = document.querySelectorAll('.cart-course')
-    if(confirmClearCart() == true){
+    // If cart is empty, notify it
+    if (cartCoursesList.length == 0){
+        displayNotifEmptyCart()
+    } else {
+        if(confirmClearCart() == true){
         for (let i = 0; i < cartCoursesList.length; i++) {
             const course = cartCoursesList[i];
             cart.removeChild(course)
@@ -143,17 +141,20 @@ function clearCart() {
         localStorage.setItem('cartStockage', '{}')
         displayNotifRemoveAll() 
     }
+    }
+    
      
 }
 
 function confirmRemoveToCart() {
     var suppCourseCart = confirm("Voulez-vous supprimer ce(s) cours ?");
-    if (suppCourseCart == false) {
+    if (suppCourseCart == true) {
         //removeToCart with confirmation popup
-        removeToCart(id)
+        return true
     }
     else {
         //cancel remove
+        return false
     }
 }
 function confirmClearCart() {
