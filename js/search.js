@@ -28,6 +28,8 @@ input.addEventListener('input', () => {
     }
     if (hiddenCourse == courses.length) {
         errorMsg.classList.remove('hidden')
+    } else {
+        errorMsg.classList.add('hidden')
     }
 
     // If the input is empty, display all courses
