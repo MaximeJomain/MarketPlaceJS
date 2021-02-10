@@ -108,19 +108,19 @@ function removeToCart(id) {
     cartcourselist = document.querySelectorAll('.cart-course')
     if (confirmRemoveToCart() == true){
         for (let i = 0; i < cartcourselist.length; i++) {
-                const course = cartcourselist[i];
-                let courseId = course.querySelector('.remove-course').getAttribute('data-id')
-                
+            const course = cartcourselist[i];
+            let courseId = course.querySelector('.remove-course').getAttribute('data-id')
+            
+            if (courseId == id) {
+                // Update the stock of the course
+                let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
+                increaseCourseStock(id, courseQte)
 
-                if (courseId == id) {
-                    // Update the stock of the course
-                    let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
-                    increaseCourseStock(id, courseQte)
-
-            cart.removeChild(cartcourselist[i])
-            delete cartStockage[id]
-            localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
-            displayNotifRemove(id)
+                cart.removeChild(cartcourselist[i])
+                delete cartStockage[id]
+                localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
+                displayNotifRemove(id)
+            }
         }
     }
 }
@@ -132,18 +132,16 @@ function clearCart() {
         displayNotifEmptyCart()
     } else {
         if(confirmClearCart() == true){
-        for (let i = 0; i < cartCoursesList.length; i++) {
-            const course = cartCoursesList[i];
-            cart.removeChild(course)
+            for (let i = 0; i < cartCoursesList.length; i++) {
+                const course = cartCoursesList[i];
+                cart.removeChild(course)
+            }
+            // Update the localstorage
+            window.location.reload()
+            localStorage.setItem('cartStockage', '{}')
+            displayNotifRemoveAll() 
         }
-        // Update the localstorage
-        window.location.reload()
-        localStorage.setItem('cartStockage', '{}')
-        displayNotifRemoveAll() 
     }
-    }
-    
-     
 }
 
 function confirmRemoveToCart() {
