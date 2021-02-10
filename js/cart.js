@@ -108,6 +108,7 @@ function removeToCart(id) {
     for (let i = 0; i < cartcourselist.length; i++) {
         const course = cartcourselist[i];
         let courseId = course.querySelector('.remove-course').getAttribute('data-id')
+        confirmRemoveToCart()
 
         if (courseId == id) {
             cart.removeChild(cartcourselist[i])
@@ -126,7 +127,7 @@ function clearCart() {
         const course = cartCoursesList[i];
         cart.removeChild(course)
     }
-
+    confirmClearCart()
     displayNotifRemoveAll()
 
     // Update the localstorage
@@ -134,6 +135,26 @@ function clearCart() {
     localStorage.setItem('cartStockage', '{}')
 }
 
+function confirmRemoveToCart() {
+    var suppCourseCart = confirm("Voulez-vous supprimer ce(s) cours ?");
+    if (suppCourseCart == false) {
+        //removeToCart with confirmation popup
+        removeToCart(id)
+    }
+    else {
+        //cancel remove
+    }
+}
+function confirmClearCart() {
+    var suppCourseCart = confirm("Voulez-vous vider le panier ?");
+    if (suppCourseCart == false) {
+        //clearCart with confirmation popup  
+        clearCart()
+    }
+    else {
+        //cancel clear
+    }
+}
 // Display notification when adding to the cart
 function displayNotifAdd(cardId){
     // Apparition d'une notif quand tu ajoute un cours au panier
