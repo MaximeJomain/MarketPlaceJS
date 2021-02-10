@@ -3,10 +3,8 @@ var addToCartBtn    = document.querySelectorAll('.add-to-cart')
 var cart            = document.querySelector('#cart tbody')
 var clearCartBtn    = document.querySelector('#empty-cart')
 var notif           = document.querySelector('.notifs')
+let deletebtnlist   = document.querySelectorAll('.remove-course')
 let promotion       = false
-let deletebtnlist = document.querySelectorAll('.remove-course')
-
-
 
 // If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
@@ -28,41 +26,40 @@ for (let i = 0; i < addToCartBtn.length; i++) {
     const btn = addToCartBtn[i];
     btn.addEventListener('click', () => {
         let cardId = btn.getAttribute('data-id')
-        if (COURSES[cardId].stock > 0) {
-   
-            // Display the item in cart
-            if (cartStockage[cardId] == null) {
-                qte = 1
-                cartStockage[cardId] = qte
-                addToCart(cardId, qte)
+        
+        // Display the item in cart
+        if (cartStockage[cardId] == null) {
+            qte = 1
+            cartStockage[cardId] = qte
+            addToCart(cardId, qte)
 
-                // Display notification
-                displayNotifAdd(cardId)
-            }
-
-            // Increase item quantity in cart if there is enough stock
-            else if (COURSES[cardId].stock > 1) {
-                qte = cartStockage[cardId]
-                qte++
-                cartStockage[cardId] = qte
-                document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
-                updateCourseStock(cardId, cartStockage[cardId])
-
-                // Display notification
-                displayNotifAdd(cardId)
-            }
-
-            // Check if promotion is activable
-            if (getCartAmount() >= 100 && promotion == false) {
-                startPromotion()
-                promotion = true
-            }
-            
-            // Save cart data in localstorage
-            localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
-    
-            
+            // Display notification
+            displayNotifAdd(cardId)
         }
+
+        // Increase item quantity in cart if there is enough stock
+        else if (COURSES[cardId].stock > 0) {
+
+            qte = cartStockage[cardId]
+            qte++
+            cartStockage[cardId] = qte
+            document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
+
+            // Update the stock of the course
+            decreaseCourseStock(cardId, qte)
+
+            // Display notification
+            displayNotifAdd(cardId)
+        }
+
+        // Check if promotion is activable
+        if (getCartAmount() >= 100 && promotion == false) {
+            startPromotion()
+            promotion = true
+        }
+        
+        // Save cart data in localstorage
+        localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     })
 }
 
@@ -71,9 +68,8 @@ localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
 function addToCart(id, qte) {
     let course = COURSES[id]
-    let stock = cartStockage[id]
 
-    if (course.stock > 0) {
+    if (course.stock >= qte) {
         cart.insertAdjacentHTML('afterbegin', `
             <tr class="cart-course">
                 <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
@@ -85,7 +81,6 @@ function addToCart(id, qte) {
         `)
         deletebtnlist = document.querySelectorAll('.remove-course')
     
-    
         // Check if promotion is activable
         if (getCartAmount() >= 100 && promotion == false) {
             startPromotion()
@@ -93,19 +88,24 @@ function addToCart(id, qte) {
         }
 
         // Update the stock of the course
-        updateCourseStock(id, qte)
+        decreaseCourseStock(id, qte)
     }
 }
 
 // Change course stock after adding it to the cart
-function updateCourseStock(id, qte) {
-    COURSES[id].stock -= qte
+function decreaseCourseStock(id, qte) {
     let stockSpan = coursesCard[id - 1].querySelector('.stock')
-    console.log(COURSES[id].stock);
-    stockSpan.innerHTML = COURSES[id].stock
-} 
 
-// Remove course from cart and localstorage 
+    COURSES[id].stock = COURSES[id].initial_stock - qte 
+    stockSpan.innerHTML = COURSES[id].stock
+}
+// Change course stock after deleting it from the cart
+function increaseCourseStock(id, qte) {
+    let stockSpan = coursesCard[id - 1].querySelector('.stock')
+    
+    COURSES[id].stock += qte
+    stockSpan.innerHTML = COURSES[id].stock
+}
 function removeToCart(id) {
     cartcourselist = document.querySelectorAll('.cart-course')
     for (let i = 0; i < cartcourselist.length; i++) {
@@ -113,10 +113,15 @@ function removeToCart(id) {
         let courseId = course.querySelector('.remove-course').getAttribute('data-id')
 
         if (courseId == id) {
+            // Update the stock of the course
+            let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
+            increaseCourseStock(id, courseQte)
+
             cart.removeChild(cartcourselist[i])
             delete cartStockage[id]
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
             displayNotifRemove(id)
+
         }
     }
 }
