@@ -13,19 +13,15 @@ if (localStorage.getItem('cartStockage') == null) {
     localStorage.setItem('cartStockage', '{}')
 }
 
-// Add courses to cart from localstorage
+// Add courses to cart from localstorage, at load of the page
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
 
 if (cartStockage.length === 0) {displayNotifEmptyCart()}
 
-// for (let i = 0; i < cartStockage.length; i++) {
-//     addToCart(cartStockage[i])
-// }
 
 Object.entries(cartStockage).forEach(([key, value]) => {
-    addToCart(key, value)
-    // updateCourseStock(cartStockage[i])
- });
+        addToCart(key, value)
+});
 
 // Add courses to cart from html
 for (let i = 0; i < addToCartBtn.length; i++) {
@@ -37,34 +33,36 @@ for (let i = 0; i < addToCartBtn.length; i++) {
             // Display the item in cart
             if (cartStockage[cardId] == null) {
                 qte = 1
-                addToCart(cardId, qte)
                 cartStockage[cardId] = qte
+                addToCart(cardId, qte)
+
+                // Display notification
+                displayNotifAdd(cardId)
             }
 
-            // Increase item quantity in cart
-            else {
+            // Increase item quantity in cart if there is enough stock
+            else if (COURSES[cardId].stock > 1) {
                 qte = cartStockage[cardId]
                 qte++
                 cartStockage[cardId] = qte
                 document.getElementById(`quantity[${cardId}]`).innerHTML = `${qte}`
+                updateCourseStock(cardId, cartStockage[cardId])
 
-                // Check if promotion is activable
-                if (getCartAmount() >= 100 && promotion == false) {
-                    startPromotion()
-                    promotion = true
-                }
+                // Display notification
+                displayNotifAdd(cardId)
             }
-    
+
+            // Check if promotion is activable
+            if (getCartAmount() >= 100 && promotion == false) {
+                startPromotion()
+                promotion = true
+            }
+            
             // Save cart data in localstorage
             localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
     
-            // Display notification
-            displayNotifAdd(cardId)
-
-            // Update the stock of the course
-            updateCourseStock(cardId)
+            
         }
-        
     })
 }
 
@@ -73,31 +71,38 @@ localStorage.setItem('cartStockage', JSON.stringify(cartStockage))
 
 function addToCart(id, qte) {
     let course = COURSES[id]
+    let stock = cartStockage[id]
 
-    cart.insertAdjacentHTML('afterbegin', `
-        <tr class="cart-course">
-            <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
-            <td class="cart-course-title">${course.title}</td>
-            <td>${course.initial_price}€</td>
-            <td class="cart-course-qte" id="quantity[${id}]">${qte}</td>
-            <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
-        </tr>
-    `)
-    deletebtnlist = document.querySelectorAll('.remove-course')
+    if (course.stock > 0) {
+        cart.insertAdjacentHTML('afterbegin', `
+            <tr class="cart-course">
+                <td><img src="img/courses/${course.img}" alt="${course.title} logo"></td>
+                <td class="cart-course-title">${course.title}</td>
+                <td>${course.initial_price}€</td>
+                <td class="cart-course-qte" id="quantity[${id}]">${qte}</td>
+                <td><img src="img/cross.png" class="remove-course" data-id="${id}" onclick="removeToCart(${id})" style="width:25px;height:auto;cursor:pointer"></td>
+            </tr>
+        `)
+        deletebtnlist = document.querySelectorAll('.remove-course')
+    
+    
+        // Check if promotion is activable
+        if (getCartAmount() >= 100 && promotion == false) {
+            startPromotion()
+            promotion = true
+        }
 
-
-    // Check if promotion is activable
-    if (getCartAmount() >= 100 && promotion == false) {
-        startPromotion()
-        promotion = true
+        // Update the stock of the course
+        updateCourseStock(id, qte)
     }
 }
 
 // Change course stock after adding it to the cart
-function updateCourseStock(id) {
-    let newStock = COURSES[id].stock -= 1
+function updateCourseStock(id, qte) {
+    COURSES[id].stock -= qte
     let stockSpan = coursesCard[id - 1].querySelector('.stock')
-    stockSpan.innerHTML = newStock
+    console.log(COURSES[id].stock);
+    stockSpan.innerHTML = COURSES[id].stock
 } 
 
 // Remove course from cart and localstorage 
@@ -128,6 +133,7 @@ function clearCart() {
     displayNotifRemoveAll()
 
     // Update the localstorage
+    window.location.reload()
     localStorage.setItem('cartStockage', '{}')
 }
 
