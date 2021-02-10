@@ -15,6 +15,9 @@ function startPromotion() {
     saveInitialPrice = COURSES[id+1].initial_price
     COURSES[id+1].initial_price = COURSES[id+1].price
 
+    // Notification saying that the promoion is starting
+    displayNotifPromoStart()
+
     // Start countdown
     setCountDown(id)
 }
@@ -22,13 +25,17 @@ function startPromotion() {
 function setCountDown(id) {
     let countDownContainer = document.querySelectorAll('.promotion span')[id]
     let finishTime = new Date().getTime() + 5 * 60000
-
+    
     let countDown = setInterval(() => {
         let actualTime = new Date().getTime()
         let distance = finishTime - actualTime
 
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
         let seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+        if(seconds == 11){
+            displayNotifPromoEnd()
+        }
 
         if (seconds < 10) {
             seconds = '0' + seconds
@@ -46,7 +53,31 @@ function setCountDown(id) {
             COURSES[id+1].initial_price = saveInitialPrice
             // Stop the countDown
             clearInterval(countDown)
+            
+
         }
 
     }, 1000)
+}
+
+function displayNotifPromoStart(){
+    // Display a message when the promotion start
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert" style="background-color: #d19526;">
+        <span class="alertaddcart"></span>
+        Une promotion de 5 minutes vient d'apparaître
+    </div>
+`)
+    $('.alert').addClass("hide")
+}
+
+function displayNotifPromoEnd(){
+    // Display a message when the promotion end
+    notif.insertAdjacentHTML('afterbegin', `
+    <div class="alert2" style="background-color: #d19526;">
+        <span class="alertaddcart"></span>
+        Votre promotion de 5 minutes va bientôt disparaître
+    </div>
+`)
+    $('.alert2').addClass("hide2")
 }

@@ -14,9 +14,6 @@ if (localStorage.getItem('cartStockage') == null) {
 // Add courses to cart from localstorage, at load of the page
 var cartStockage = JSON.parse(localStorage.getItem('cartStockage'))
 
-if (cartStockage.length === 0) {displayNotifEmptyCart()}
-
-
 Object.entries(cartStockage).forEach(([key, value]) => {
         addToCart(key, value)
 });
@@ -111,8 +108,10 @@ function removeToCart(id) {
     for (let i = 0; i < cartcourselist.length; i++) {
         const course = cartcourselist[i];
         let courseId = course.querySelector('.remove-course').getAttribute('data-id')
+        
 
         if (courseId == id) {
+            confirmRemoveToCart()
             // Update the stock of the course
             let courseQte = parseInt(document.getElementById(`quantity[${id}]`).innerHTML)
             increaseCourseStock(id, courseQte)
@@ -124,6 +123,7 @@ function removeToCart(id) {
 
         }
     }
+    
 }
 
 // Clear the cart
@@ -134,7 +134,7 @@ function clearCart() {
         const course = cartCoursesList[i];
         cart.removeChild(course)
     }
-
+    confirmClearCart()
     displayNotifRemoveAll()
 
     // Update the localstorage
@@ -142,6 +142,26 @@ function clearCart() {
     localStorage.setItem('cartStockage', '{}')
 }
 
+function confirmRemoveToCart() {
+    var suppCourseCart = confirm("Voulez-vous supprimer ce(s) cours ?");
+    if (suppCourseCart == false) {
+        //removeToCart with confirmation popup
+        removeToCart(id)
+    }
+    else {
+        //cancel remove
+    }
+}
+function confirmClearCart() {
+    var suppCourseCart = confirm("Voulez-vous vider le panier ?");
+    if (suppCourseCart == false) {
+        //clearCart with confirmation popup  
+        clearCart()
+    }
+    else {
+        //cancel clear
+    }
+}
 // Display notification when adding to the cart
 function displayNotifAdd(cardId){
     // Apparition d'une notif quand tu ajoute un cours au panier
@@ -213,4 +233,13 @@ function displayNotifEmptyCart(){
     </div>
 `)
     $('.alert').addClass("hide")
+}
+
+function cartIsEmpty(){
+    cartcourselist = document.querySelectorAll('.cart-course')
+    if (cartcourselist.length == 0){
+        displayNotifEmptyCart()
+    } else {
+        window.location.href = 'form.html'
+    }
 }

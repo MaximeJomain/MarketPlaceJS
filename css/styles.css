@@ -334,6 +334,52 @@ footer {
   }
 }
 
+.alert2 {
+  visibility: hidden;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-bottom: 4px;
+}
+
+.alert2.hide2{
+  animation-duration: 12s;
+  animation-name: hide2_slide;
+}
+
+@keyframes hide2_slide{
+  0%{  
+  }
+  8%{
+    visibility: hidden;
+  }
+  84%{
+    transform: translateX(0px);
+    visibility: visible;
+  }
+  88%{
+    transform: translateX(-10px);
+    visibility: visible;
+  }
+  92%{
+    transform: translateX(0%);
+    visibility: visible;
+  }
+  96%{
+    transform: translateX(-10%);
+    visibility: visible;
+  }
+  100%{
+    transform: translateX(150%);
+    visibility: visible;
+  }
+}
+
 .promotion {
   display: none;
   margin-bottom: 10px;
