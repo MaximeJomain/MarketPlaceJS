@@ -24,7 +24,7 @@ function startPromotion() {
 
 function setCountDown(id) {
     let countDownContainer = document.querySelectorAll('.promotion span')[id]
-    let finishTime = new Date().getTime() + 0.5 * 60000
+    let finishTime = new Date().getTime() + 5 * 60000
     
     let countDown = setInterval(() => {
         let actualTime = new Date().getTime()
