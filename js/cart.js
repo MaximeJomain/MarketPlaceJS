@@ -6,6 +6,13 @@ var notif           = document.querySelector('.notifs')
 let deletebtnlist   = document.querySelectorAll('.remove-course')
 let promotion       = false
 
+// If cart is empty, notify it
+cartcourselist = document.querySelectorAll('.cart-course')
+    if (cartcourselist.length == 0){
+        displayNotifEmptyCart()
+    }
+
+
 // If variable doesn't exists, create it
 if (localStorage.getItem('cartStockage') == null) {
     localStorage.setItem('cartStockage', '{}')
@@ -126,17 +133,17 @@ function removeToCart(id) {
 
 function clearCart() {
     var cartCoursesList = document.querySelectorAll('.cart-course')
-
-    for (let i = 0; i < cartCoursesList.length; i++) {
-        const course = cartCoursesList[i];
-        cart.removeChild(course)
+    if(confirmClearCart() == true){
+        for (let i = 0; i < cartCoursesList.length; i++) {
+            const course = cartCoursesList[i];
+            cart.removeChild(course)
+        }
+        // Update the localstorage
+        window.location.reload()
+        localStorage.setItem('cartStockage', '{}')
+        displayNotifRemoveAll() 
     }
-    confirmClearCart()
-    displayNotifRemoveAll()
-
-    // Update the localstorage
-    window.location.reload()
-    localStorage.setItem('cartStockage', '{}')
+     
 }
 
 function confirmRemoveToCart() {
@@ -151,12 +158,13 @@ function confirmRemoveToCart() {
 }
 function confirmClearCart() {
     var suppCourseCart = confirm("Voulez-vous vider le panier ?");
-    if (suppCourseCart == false) {
+    if (suppCourseCart == true) {
         //clearCart with confirmation popup  
-        clearCart()
+        return true
     }
     else {
         //cancel clear
+        return false
     }
 }
 // Display notification when adding to the cart
