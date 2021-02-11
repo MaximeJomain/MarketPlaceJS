@@ -1,14 +1,15 @@
 var component = document.querySelector('.courses__container')
-var coursesList = Object.keys(COURSES) // Récupération de toutes les clés de mon objet COURSES
+// var coursesList = Object.keys(COURSES) // Récupération de toutes les clés de mon objet COURSES
 
+var coursesList = getAllCourses()
+
+console.log(coursesList)
 // Pour chaque clés de COURSES, on print le cours 
-for (let i = coursesList.length; i >= 1; i--) {
-    printComponent(i)
+for (let i = coursesList.length - 1; i >= 0 ; i--) {
+    printComponent(coursesList[i])
 }
 
-function printComponent(id) {
-    // On récupère l'id du cours qu'on va print
-    let course = COURSES[id]
+function printComponent(course) {
     // on insert une div avec toutes les informations de notre cours 
     component.insertAdjacentHTML('afterbegin', `
     <div class="course__item">
@@ -28,7 +29,7 @@ function printComponent(id) {
             <p>
                 Disponible: <span class="stock">${course.stock}</span>
             </p>
-            <a href="#" class="add-to-cart" data-id="${id}"><i class="fa fa-cart-plus"></i>Ajouter au panier</a>
+            <a href="#" class="add-to-cart" data-id="${course.id}"><i class="fa fa-cart-plus"></i>Ajouter au panier</a>
         </div>
     </div>
     `)
