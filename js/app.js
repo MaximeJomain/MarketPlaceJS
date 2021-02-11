@@ -1,16 +1,15 @@
 var component = document.querySelector('.courses__container')
-// var coursesList = Object.keys(COURSES) // Récupération de toutes les clés de mon objet COURSES
+// var coursesList = Object.keys(COURSES)
 
-var coursesList = getAllCourses()
+var coursesList = getAllCourses() // Get all courses from the db
 
-console.log(coursesList)
-// Pour chaque clés de COURSES, on print le cours 
+// From the db for each courses 
 for (let i = coursesList.length - 1; i >= 0 ; i--) {
     printComponent(coursesList[i])
 }
 
 function printComponent(course) {
-    // on insert une div avec toutes les informations de notre cours 
+    // Insert of a div with all the information of the courses
     component.insertAdjacentHTML('afterbegin', `
     <div class="course__item">
         <figure class="course_img">

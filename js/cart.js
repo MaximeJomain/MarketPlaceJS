@@ -168,7 +168,7 @@ function confirmClearCart() {
 }
 // Display notification when adding to the cart
 function displayNotifAdd(cardId){
-    // Apparition d'une notif quand tu ajoute un cours au panier
+    // Display a message when you add a course to the cart
     notif.insertAdjacentHTML('afterbegin', `
     <div class="alert" style="background-color: #00B2BD;">
         <span class="alertaddcart"></span>
@@ -206,7 +206,7 @@ function getCoursePrice(courseTitle) {
 }
 
 function displayNotifRemove(cardId){
-    // Apparition d'une notif quand tu retire un cours du panier
+    // Display a message when you remove a course from the cart
     notif.insertAdjacentHTML('afterbegin', `
     <div class="alert" style="background-color: #E25241;">
         <span class="alertaddcart"></span>
@@ -217,7 +217,7 @@ function displayNotifRemove(cardId){
 }
 
 function displayNotifRemoveAll(){
-    // Apparition d'une notif quand tu vide le panier
+    // Display a message when you remove the cart
     notif.insertAdjacentHTML('afterbegin', `
     <div class="alert" style="background-color: #d03625;">
         <span class="alertaddcart"></span>

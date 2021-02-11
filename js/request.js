@@ -9,7 +9,6 @@ function getCourseById(id) {
         },
         async: false,
         success: (data) => {
-            console.log(data);
             course = data
         },
     })
@@ -24,7 +23,6 @@ function getAllCourses() {
         method: 'post',
         async: false,
         success: (data) => {
-            console.log(data);
             courses = data
             
         },
